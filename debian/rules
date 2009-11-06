@@ -31,8 +31,7 @@ get-orig-source:
                 --watchfile $(DEBIAN_DIR)/watch \
                 --upstream-version $(VERSION) \
                 --download-version $(VERSION) \
-		--destdir . 
-		
+		--destdir . \
 		--rename \
 		--repack \
 		--verbose
