@@ -1,0 +1,64 @@
+#!/usr/bin/make -f
+export DH_VERBOSE=1
+
+MAKEFILE = $(firstword $(MAKEFILE_LIST))
+DEBIAN_DIR = $(dir $(MAKEFILE))
+SOURCE_DIR = $(DEBIAN_DIR)/..
+
+DEB_VERSION = $(shell dpkg-parsechangelog | grep ^Vers | cut -d\  -f2)
+#DEB_REVISION = $(shell echo $(DEB_VERSION) | sed 's,.*-,,' )
+VERSION = $(shell echo $(DEB_VERSION) | sed 's,-.*,,' | sed 's,+dfsg.*,,')
+#NEXT_UPVERSION = $(shell perl -e '$$_=pop; s/(\d+)$$/$$1+1/e; print' $(VERSION))
+DEB_SOURCE_NAME = $(shell dpkg-parsechangelog -l$(DEBIAN_DIR)/changelog | grep ^Source | cut -d" " -f2)
+
+#VERSION = 0.86-beta1
+
+include /usr/share/quilt/quilt.make
+include /usr/share/cli-common/cli.make
+
+MAKE_FLAGS = MONO=/usr/bin/cli MCS=/usr/bin/csc
+
+override_dh_auto_build: $(DPATCH_STAMPFN)
+	$(MAKE) $(MAKE_FLAGS)
+
+override_dh_auto_install:
+	$(MAKE) $(MAKE_FLAGS) prefix=/usr DESTDIR=$(CURDIR)/debian/tmp install
+	
+#get-orig-source: TARBALL_DIR = $(DEB_SOURCE_NAME)-$(VERSION)
+get-orig-source:
+	uscan \
+                --package $(DEB_SOURCE_NAME) \
+                --watchfile $(DEBIAN_DIR)/watch \
+                --upstream-version $(VERSION) \
+                --download-version $(VERSION) \
+		--destdir . 
+		
+		--rename \
+		--repack \
+		--verbose
+	if [ -d $(DEB_SOURCE_NAME)_$(VERSION) ]; then \
+		echo "$(TARBALL_DIR) is in the way, bailing out!"; \
+		exit 1; \
+	fi
+	if [ -d $(DEB_SOURCE_NAME)_$(VERSION)+dfsg ]; then \
+		echo "$(TARBALL_DIR)+dfsg is in the way, bailing out!"; \
+		exit 1; \
+	fi
+	tar -xzf $(DEB_SOURCE_NAME)_$(VERSION).orig.tar.gz
+	rm $(DEB_SOURCE_NAME)_$(VERSION).orig.tar.gz
+	# remove binaries
+	rm -rf $(DEB_SOURCE_NAME)-$(VERSION)/lib
+	find $(DEB_SOURCE_NAME)-$(VERSION) \
+		\( -iname '*.exe' \
+		-o -iname '*.dll' \
+		-o -iname '*.pdb' \
+		-o -iname '*.mdb' \
+		-o -iname '*.resources' \) \
+		-delete
+	mv $(DEB_SOURCE_NAME)-$(VERSION) $(DEB_SOURCE_NAME)-$(VERSION)+dfsg
+	tar -czf $(DEB_SOURCE_NAME)_$(VERSION)+dfsg.orig.tar.gz $(DEB_SOURCE_NAME)-$(VERSION)+dfsg
+	rm -r $(DEB_SOURCE_NAME)-$(VERSION)+dfsg
+
+%:
+	dh $@
+

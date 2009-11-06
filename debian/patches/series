@@ -1,0 +1,4 @@
+006-nant-dont-build-ndoc-support.diff
+004-nant-nunit_2.4.diff
+003-nant-use-system-dlls.diff
+000-fix_build_system.diff
