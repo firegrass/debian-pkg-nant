@@ -18,7 +18,7 @@ include /usr/share/cli-common/cli.make
 
 MAKE_FLAGS = MONO=/usr/bin/cli MCS=/usr/bin/csc
 
-override_dh_auto_build: $(DPATCH_STAMPFN)
+override_dh_auto_build: $(QUILT_STAMPFN)
 	$(MAKE) $(MAKE_FLAGS)
 
 override_dh_auto_install:
