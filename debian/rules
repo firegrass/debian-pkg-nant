@@ -22,7 +22,7 @@ override_dh_auto_build: $(QUILT_STAMPFN)
 	$(MAKE) $(MAKE_FLAGS)
 
 override_dh_auto_install:
-	$(MAKE) $(MAKE_FLAGS) prefix=/usr DESTDIR=$(CURDIR)/debian/tmp install
+	$(MAKE) $(MAKE_FLAGS) prefix=/usr DESTDIR=$(CURDIR)/debian/nant install
 	
 #get-orig-source: TARBALL_DIR = $(DEB_SOURCE_NAME)-$(VERSION)
 get-orig-source:

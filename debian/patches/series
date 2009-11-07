@@ -3,3 +3,4 @@
 003-nant-use-system-dlls.diff
 000-fix_build_system.diff
 sharpziplib-abi-break
+do-not-use-mono-3.5-dir

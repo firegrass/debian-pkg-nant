@@ -1,0 +1,50 @@
+--- nant-0.86-beta1+dfsg.orig/src/NAnt.Console/App.config
++++ nant-0.86-beta1+dfsg/src/NAnt.Console/App.config
+@@ -1177,12 +1177,6 @@
+                             </strict>
+                         </modes>
+                     </runtime>
+-                    <reference-assemblies basedir="${path::combine(frameworkAssemblyDirectory, 'mono/3.5')}">
+-                        <include name="*.dll" />
+-                    </reference-assemblies>
+-                    <reference-assemblies basedir="${path::combine(frameworkAssemblyDirectory, 'mono/3.0')}">
+-                        <include name="*.dll" />
+-                    </reference-assemblies>
+                     <reference-assemblies basedir="${path::combine(frameworkAssemblyDirectory, 'mono/2.0')}">
+                         <include name="*.dll" />
+                     </reference-assemblies>
+@@ -1195,7 +1189,6 @@
+                         <include name="extensions/common/2.0/**/*.dll" />
+                     </task-assemblies>
+                     <tool-paths>
+-                        <directory name="${path::combine(frameworkAssemblyDirectory, 'mono/3.5')}" />
+                         <directory name="${path::combine(frameworkAssemblyDirectory, 'mono/2.0')}" />
+                         <directory name="${path::combine(frameworkAssemblyDirectory, 'mono/1.0')}" />
+                     </tool-paths>
+@@ -1214,7 +1207,7 @@
+                             <call target="configure-from-registry" />
+                         </if>
+ 
+-                        <property name="toolDirectory" value="${path::combine(frameworkAssemblyDirectory, 'mono/3.5')}" />
++                        <property name="toolDirectory" value="${path::combine(frameworkAssemblyDirectory, 'mono/2.0')}" />
+                         <property name="runtimeEngine" value="${path::combine(sdkInstallRoot, 'bin/mono.exe')}" />
+ 
+                         <target name="configure-from-pkg-config">
+@@ -1308,7 +1301,7 @@
+                             </auto>
+                         </modes>
+                     </runtime>
+-                    <reference-assemblies basedir="${path::combine(prefix, 'lib/mono/2.1')}">
++                    <reference-assemblies basedir="${path::combine(prefix, 'lib/mono/2.0')}">
+                         <include name="agclr.dll" />
+                         <include name="Microsoft.VisualBasic.dll" />
+                         <include name="mscorlib.dll" />
+@@ -1349,7 +1342,7 @@
+                             <call target="configure-from-registry" />
+                         </if>
+ 
+-                        <property name="toolDirectory" value="${path::combine(frameworkAssemblyDirectory, 'mono/2.1')}" />
++                        <property name="toolDirectory" value="${path::combine(frameworkAssemblyDirectory, 'mono/2.0')}" />
+                         <property name="runtimeEngine" value="${path::combine(sdkInstallRoot, 'bin/mono.exe')}" />
+ 
+                         <target name="configure-from-pkg-config">
