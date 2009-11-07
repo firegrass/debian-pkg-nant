@@ -6,12 +6,8 @@ DEBIAN_DIR = $(dir $(MAKEFILE))
 SOURCE_DIR = $(DEBIAN_DIR)/..
 
 DEB_VERSION = $(shell dpkg-parsechangelog | grep ^Vers | cut -d\  -f2)
-#DEB_REVISION = $(shell echo $(DEB_VERSION) | sed 's,.*-,,' )
 VERSION = $(shell echo $(DEB_VERSION) | sed 's,-.*,,' | sed 's,+dfsg.*,,')
-#NEXT_UPVERSION = $(shell perl -e '$$_=pop; s/(\d+)$$/$$1+1/e; print' $(VERSION))
 DEB_SOURCE_NAME = $(shell dpkg-parsechangelog -l$(DEBIAN_DIR)/changelog | grep ^Source | cut -d" " -f2)
-
-#VERSION = 0.86-beta1
 
 include /usr/share/quilt/quilt.make
 include /usr/share/cli-common/cli.make
@@ -24,7 +20,6 @@ override_dh_auto_build: $(QUILT_STAMPFN)
 override_dh_auto_install:
 	$(MAKE) $(MAKE_FLAGS) prefix=/usr DESTDIR=$(CURDIR)/debian/nant install
 	
-#get-orig-source: TARBALL_DIR = $(DEB_SOURCE_NAME)-$(VERSION)
 get-orig-source:
 	uscan \
                 --package $(DEB_SOURCE_NAME) \
@@ -36,11 +31,11 @@ get-orig-source:
 		--repack \
 		--verbose
 	if [ -d $(DEB_SOURCE_NAME)_$(VERSION) ]; then \
-		echo "$(TARBALL_DIR) is in the way, bailing out!"; \
+		echo "$(DEB_SOURCE_NAME)_$(VERSION) is in the way, bailing out!"; \
 		exit 1; \
 	fi
 	if [ -d $(DEB_SOURCE_NAME)_$(VERSION)+dfsg ]; then \
-		echo "$(TARBALL_DIR)+dfsg is in the way, bailing out!"; \
+		echo "$(DEB_SOURCE_NAME)_$(VERSION)+dfsg is in the way, bailing out!"; \
 		exit 1; \
 	fi
 	tar -xzf $(DEB_SOURCE_NAME)_$(VERSION).orig.tar.gz
